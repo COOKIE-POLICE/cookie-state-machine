@@ -80,12 +80,20 @@ state_machine.set_initial_state("Idle")
 Add conditional transitions between states:
 
 ```python
+# Single from_state example:
 state_machine.add_transition("Idle", "Moving", lambda state_machine: state_machine.context.get("should_move", False))
+
+# Or from multiple states at once:
+state_machine.add_transition(
+    ["Idle", "Moving"],  # Iterable of from_states
+    "Reset",
+    lambda state_machine: state_machine.context.get("force_reset", False)
+)
 ```
 
 Each transition has:
 
-* `from_state` — name of the origin state
+* `from_state` — name of the origin state, or an iterable of names to add the same transition from multiple states at once
 * `to_state` — name of the target state
 * `condition(state_machine)` — function that returns `True` to trigger the transition
 
